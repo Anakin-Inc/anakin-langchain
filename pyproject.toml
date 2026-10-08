@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "langchain-anakin"
-version = "0.2.0"
+version = "0.3.0"
 description = "An integration package connecting Anakin and LangChain"
 license = { text = "Apache-2.0" }
 readme = "README.md"
@@ -21,8 +21,8 @@ classifiers = [
 ]
 requires-python = ">=3.10,<4.0"
 dependencies = [
-    "langchain-core>=0.3.0,<1.0.0",
-    "anakin-sdk>=0.1.0,<0.2.0",
+    "langchain-core>=0.3.0,<2.0.0",
+    "anakin-sdk>=0.2.0,<0.3.0",
 ]
 
 [project.urls]
@@ -35,6 +35,7 @@ Issues = "https://github.com/Anakin-Inc/anakin-langchain/issues"
 test = [
     "pytest>=8.0.0,<9.0.0",
     "pytest-mock>=3.10.0,<4.0.0",
+    "pytest-asyncio>=0.23.0,<2.0.0",
 ]
 typing = [
     "mypy>=1.10.0,<2.0.0",
@@ -42,6 +43,12 @@ typing = [
 
 [tool.pytest.ini_options]
 addopts = "--strict-markers --strict-config"
+asyncio_mode = "auto"
 
 [tool.mypy]
 disallow_untyped_defs = true
+
+# anakin-sdk 0.2.0 is not on PyPI yet: develop against the sibling checkout.
+# Drop this once it is published (uv sources never reach the built wheel).
+[tool.uv.sources]
+anakin-sdk = { path = "../anakin-py", editable = true }
