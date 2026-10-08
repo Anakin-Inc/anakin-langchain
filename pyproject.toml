@@ -52,3 +52,7 @@ disallow_untyped_defs = true
 # Drop this once it is published (uv sources never reach the built wheel).
 [tool.uv.sources]
 anakin-sdk = { path = "../anakin-py", editable = true }
+
+# Internal notes and the dev lockfile stay out of the published sdist.
+[tool.hatch.build.targets.sdist]
+exclude = ["SUBMIT.md", "uv.lock"]
