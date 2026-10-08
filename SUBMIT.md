@@ -1,5 +1,24 @@
 # langchain-anakin — verification status
 
+## 0.3.0 (anakin-sdk 0.2.0 update), verified 2026-10-08
+
+- `uv run pytest`: 19 passed against `anakin-sdk` 0.2.0 (local
+  `../anakin-py`) on `langchain-core` 1.6.7, and again on `langchain-core`
+  0.3.x (the lower bound).
+- `ruff check` and `mypy langchain_anakin`: clean.
+- Live keyless smoke test against api.anakin.io:
+  - `AnakinWireDiscoverTool` returned real Walmart actions.
+  - `AnakinSearchTool` returned the expected `ConfigurationError` + signup link.
+  - `AnakinScrapeTool` returned `InsufficientCreditsError: The keyless free
+    tier is at capacity right now`, so the keyless scrape path is wired but
+    its success case was not observed.
+- Not verified: any keyed live call (no API key used), and the async tools
+  against the live API (mock-tested only).
+- Blocker for publishing: `anakin-sdk` 0.2.0 must be on PyPI first. Then
+  remove `[tool.uv.sources]` from `pyproject.toml`.
+
+## Earlier notes (0.2.0 and before)
+
 ## Live-verified, not assumed
 
 - `anakin-sdk` is **live on PyPI right now** (confirmed via
