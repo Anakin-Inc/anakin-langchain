@@ -48,11 +48,6 @@ asyncio_mode = "auto"
 [tool.mypy]
 disallow_untyped_defs = true
 
-# anakin-sdk 0.2.0 is not on PyPI yet: develop against the sibling checkout.
-# Drop this once it is published (uv sources never reach the built wheel).
-[tool.uv.sources]
-anakin-sdk = { path = "../anakin-py", editable = true }
-
 # Internal notes and the dev lockfile stay out of the published sdist.
 [tool.hatch.build.targets.sdist]
 exclude = ["SUBMIT.md", "uv.lock"]

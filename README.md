@@ -82,9 +82,7 @@ needs to fix the problem.
 
 ## Development
 
-Requires `anakin-sdk` 0.2.x. Until 0.2.0 is on PyPI, `[tool.uv.sources]` in
-`pyproject.toml` points at the sibling checkout `../anakin-py`; drop that
-override once it is published.
+Requires `anakin-sdk` 0.2.x.
 
 ```bash
 uv sync --group test
