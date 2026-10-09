@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.3.0] - unreleased
+## [0.3.0] - 2026-10-09
 
 Tracks `anakin-sdk` 0.2.0.
 
