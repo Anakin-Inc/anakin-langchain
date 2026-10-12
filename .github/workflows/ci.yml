@@ -37,7 +37,8 @@ jobs:
         run: uv run pytest
 
   lowest:
-    # The oldest versions the dependency ranges allow, on the oldest Python.
+    # The oldest runtime dependencies the package allows, on the oldest Python.
+    # Test tools stay current: they aren't what this job checks.
     name: Lowest dependencies
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -49,8 +50,9 @@ jobs:
       - name: Install
         run: |
           uv venv .venv-lowest
-          uv pip install --python .venv-lowest --resolution lowest-direct -e . \
-            "pytest>=8,<9" "pytest-mock>=3.10" "pytest-asyncio>=0.23,<2"
+          uv pip install --python .venv-lowest --resolution lowest-direct -e .
+          uv pip install --python .venv-lowest \
+            "pytest>=8,<9" "pytest-mock>=3.10" "pytest-asyncio>=0.23.5,<2"
       - name: Test
         run: .venv-lowest/bin/python -m pytest
 

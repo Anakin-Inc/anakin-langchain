@@ -401,7 +401,7 @@ requires-dist = [
 [package.metadata.requires-dev]
 test = [
     { name = "pytest", specifier = ">=8.0.0,<9.0.0" },
-    { name = "pytest-asyncio", specifier = ">=0.23.0,<2.0.0" },
+    { name = "pytest-asyncio", specifier = ">=0.23.5,<2.0.0" },
     { name = "pytest-mock", specifier = ">=3.10.0,<4.0.0" },
 ]
 typing = [{ name = "mypy", specifier = ">=1.10.0,<2.0.0" }]
