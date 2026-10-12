@@ -1,5 +1,30 @@
 # langchain-anakin — verification status
 
+## 0.4.0 (all 22 hosted MCP tools), verified 2026-10-12
+
+- `pytest`: 77 passed on Python 3.14 with `langchain-core` 1.6.7, on Python
+  3.13 with 1.6.9, and on the lowest versions the package allows (Python 3.10,
+  `langchain-core` 0.3.0, `anakin-sdk` 0.2.0, `httpx` 0.27.0).
+- `ruff check` and `mypy langchain_anakin`: clean.
+- The new tests use `create_autospec` mocks of real `Anakin` / `AsyncAnakin`
+  clients, so an argument the SDK doesn't take fails a test. Monitor option
+  names are also checked against the SDK's own `monitor_body`.
+- Parity: a test fails if a hosted MCP tool or parameter is missing (except
+  `wire_build_status.include_events`, which the SDK has no option for). Every
+  argument has a description in the tool schema and in
+  `convert_to_openai_tool` output.
+- Live keyless smoke test against api.anakin.io: `AnakinWireCatalogTool`
+  listed 1,165 catalogs and one catalog's 5 actions. `AnakinSearchTool`
+  without a key returned the expected `ConfigurationError`. `AnakinToolkit()`
+  builds all 22 tools without a key.
+- Found and fixed: `langchain-core` 0.3.0's docstring parser reads a wrapped
+  `Word: ...` line in an Args section as a new argument, and then every tool
+  fails to build. A test now guards against it.
+- `uv build` and `twine check --strict`: passed. The sdist still excludes
+  `SUBMIT.md` and `uv.lock`.
+- Not verified: any keyed live call (no API key used), and
+  `AnakinBrowserTaskTool` against the live API (mock-tested only).
+
 ## 0.3.0 (anakin-sdk 0.2.0 update), verified 2026-10-08
 
 - `uv run pytest`: 19 passed against `anakin-sdk` 0.2.0 (local

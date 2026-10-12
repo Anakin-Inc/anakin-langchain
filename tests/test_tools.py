@@ -111,6 +111,8 @@ def test_scrape_tool_returns_markdown() -> None:
         country="us",
         use_browser=False,
         force_fresh=False,
+        session_id=None,
+        session_name=None,
     )
 
 
@@ -225,7 +227,14 @@ def test_map_tool_returns_links() -> None:
 
     assert result == ["https://example.com/a", "https://example.com/b"]
     tool.client.map.assert_called_once_with(
-        "https://example.com", search="pricing", limit=100, include_subdomains=False
+        "https://example.com",
+        search="pricing",
+        limit=100,
+        include_subdomains=False,
+        depth=2,
+        limit_per_level=100,
+        include_external_links=False,
+        use_browser=False,
     )
 
 
@@ -255,6 +264,9 @@ def test_crawl_tool_returns_page_markdown() -> None:
         include_patterns=["/a*"],
         exclude_patterns=(),
         use_browser=False,
+        country="us",
+        session_id=None,
+        session_name=None,
     )
 
 
@@ -291,6 +303,7 @@ def test_wire_discover_tool_returns_compact_matches() -> None:
     )
 
 
+@pytest.mark.filterwarnings("ignore:AnakinWireRunTool is deprecated:DeprecationWarning")
 def test_wire_run_tool_uses_wire_run_with_a_key() -> None:
     tool = AnakinWireRunTool()
     tool.client = MagicMock()
@@ -308,6 +321,7 @@ def test_wire_run_tool_uses_wire_run_with_a_key() -> None:
     tool.client.wire.zero_touch.assert_not_called()
 
 
+@pytest.mark.filterwarnings("ignore:AnakinWireRunTool is deprecated:DeprecationWarning")
 def test_wire_run_tool_falls_back_to_zero_touch_without_a_key() -> None:
     tool = AnakinWireRunTool()
     tool.client = MagicMock()
@@ -324,6 +338,7 @@ def test_wire_run_tool_falls_back_to_zero_touch_without_a_key() -> None:
     tool.client.wire.run.assert_not_called()
 
 
+@pytest.mark.filterwarnings("ignore:AnakinWireRunTool is deprecated:DeprecationWarning")
 def test_wire_run_tool_surfaces_connect_url() -> None:
     tool = AnakinWireRunTool()
     tool.client = MagicMock()
@@ -337,6 +352,7 @@ def test_wire_run_tool_surfaces_connect_url() -> None:
     assert "https://anakin.io/connect/linkedin" in result["error"]
 
 
+@pytest.mark.filterwarnings("ignore:AnakinWireRunTool is deprecated:DeprecationWarning")
 async def test_wire_run_tool_async(async_client: MagicMock) -> None:
     async_client.api_key_configured = True
     async_client.wire.run = AsyncMock(
