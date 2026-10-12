@@ -1,0 +1,67 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Python ${{ matrix.python }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.10", "3.11", "3.12", "3.13", "3.14"]
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v10.2.0
+        with:
+          python-version: ${{ matrix.python }}
+          enable-cache: true
+      - name: Install
+        run: uv sync --locked --group test --group typing
+      - name: Lint
+        run: uvx ruff@0.17.0 check .
+      - name: Type check
+        run: uv run mypy langchain_anakin
+      - name: Test
+        run: uv run pytest
+
+  lowest:
+    # The oldest versions the dependency ranges allow, on the oldest Python.
+    name: Lowest dependencies
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v10.2.0
+        with:
+          python-version: "3.10"
+      - name: Install
+        run: |
+          uv venv .venv-lowest
+          uv pip install --python .venv-lowest --resolution lowest-direct -e . \
+            "pytest>=8,<9" "pytest-mock>=3.10" "pytest-asyncio>=0.23,<2"
+      - name: Test
+        run: .venv-lowest/bin/python -m pytest
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v10.2.0
+      - name: Build
+        run: uv build
+      - name: Check metadata
+        run: uvx twine check --strict dist/*
